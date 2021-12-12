@@ -1,13 +1,12 @@
 // declare variables related to API call
-var zipInputEl = document.querySelector('#zipcode');
-var zipFormEl = document.querySelector('#zip-form');
+var cityInputEl = document.querySelector('#cityName');
+var cityFormEl = document.querySelector('#city-form');
 var todayTemp = document.querySelector('#today-temp');
 var todayWind = document.querySelector("#today-wind");
 var todayHumidity = document.querySelector("#today-humidity");
 var todayUV = document.querySelector("#today-uv");
 var todaysDateEl = document.querySelector('#todays-date');
 var icon = document.querySelector("#icon");
-var city = document.querySelector("#city");
 var btnContainer = document.querySelector("#btn-div");
 
 // moment in time for today's forecast
@@ -19,9 +18,9 @@ todaysDateEl.textContent = (today.format("dddd, MMMM Do YYYY"));
 
 function getWeather (event) {
   var APIkey = "256e015175e41b85d6b79c9fecee47d5";
-  var zipcode = zipInputEl.value.trim();
-  console.log(zipcode);
-  var requestUrl = 'http://api.openweathermap.org/data/2.5/weather?zip=' + zipcode + '&appid=' + APIkey;
+  var cityName = cityInputEl.value.trim();
+  console.log(cityName);
+  var requestUrl = 'http://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&appid=' + APIkey;
   console.log(requestUrl);
   event.preventDefault();
  
@@ -69,10 +68,10 @@ function getWeather (event) {
 // // gets today's weather data and appends the data to the today's weather report accordion item
 // function getWeatherData () {
 //     var APIkey = "c9a9ed03a355403f4cb9a36e931c0b4a";
-//     var zipcode = zipInputEl.value.trim();
-//     localStorage.setItem("history", JSON.stringify(zipcode));
-//     event.console.log(zipcode);
-//     var requestUrl = 'http://api.openweathermap.org/data/2.5/weather?zip=' + zipcode + '&appid=' + APIkey;
+//     var cityName = cityInputEl.value.trim();
+//     localStorage.setItem("history", JSON.stringify(cityName));
+//     event.console.log(cityName);
+//     var requestUrl = 'http://api.openweathermap.org/data/2.5/weather?zip=' + cityName + '&appid=' + APIkey;
     
 //     fetch(requestUrl)
 //       .then(function (response) {
@@ -153,4 +152,4 @@ function getWeather (event) {
  
             // "Temperature: " + Math.floor(data.main.temp - kelvin * 1.8 + 32) + "°F";
 function handleForm(event) {event.preventDefault();};
-zipFormEl.addEventListener("submit", getWeather);
+cityFormEl.addEventListener("submit", getWeather);
