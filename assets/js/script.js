@@ -8,6 +8,9 @@ var todayUV = document.querySelector("#today-uv");
 var todaysDateEl = document.querySelector('#todays-date');
 var icon = document.querySelector("#icon");
 var btnContainer = document.querySelector("#btn-div");
+let history = JSON.parse(localStorage.getItem("search-history")) || [];
+var clearBtn = document.querySelector("#clear-btn");
+console.log(history)
 
 // moment in time for today's forecast
 var today = moment();
@@ -60,9 +63,43 @@ function getWeather (event) {
 
     
             todayUV.textContent = "UV Index: " + data.current.uvi;
+
+            saveHistory ();
           }) } })  }) } })
 
 };
+
+// set search history to local storage based on what was entered in the user input search
+function saveHistory () {
+  var cityName = cityInputEl.value;
+  history.push(cityName);
+  localStorage.setItem("search-history", JSON.stringify(history));
+  renderSearchHistBtns ();
+}
+
+function renderSearchHistBtns () {
+  btnContainer.innerHTML = "";
+
+    for(let i=0; i<history.length; i++) {
+        var histBtn = document.createElement("button");
+        histBtn.setAttribute("type", "submit");
+        // histBtn.setAttribute("readonly", true);
+        histBtn.setAttribute("class", "btn btn-primary");
+        histBtn.setAttribute("id", "history-btn");
+        histBtn.textContent = history[i];
+        histBtn.addEventListener("click", function () {
+          getWeather(histBtn.value);
+        })
+        btnContainer.append(histBtn);
+    }
+}
+
+clearBtn.addEventListener("click",function() {
+  localStorage.removeItem("search-history");
+  history = [];
+  console.log(history);
+  renderSearchHistBtns();
+})
 
 
 // // gets today's weather data and appends the data to the today's weather report accordion item
@@ -126,17 +163,17 @@ function getWeather (event) {
 //   };
 
 
-  function appendHistory () {
-    // gets search history to local storage
-      var history = (localStorage.getItem(history));
-      console.log(history);
+  // function appendHistory () {
+  //   // gets search history to local storage
+  //     var history = (localStorage.getItem(history));
+  //     console.log(history);
 
-    array.forEach(history => {
-      var newButton = document.createElement('button')
-      newButton.classList.add("btn btn-primary");
-      newButton.textContent = history;
-      btnContainer.append(newButton);
-    }); 
+  //   array.forEach(history => {
+  //     var newButton = document.createElement('button')
+  //     newButton.classList.add("btn btn-primary");
+  //     newButton.textContent = history;
+  //     btnContainer.append(newButton);
+  //   }); 
     
     // for(i = 0; i < history.length; i++) {
     //   var newButton = document.createElement(button, {is:SubmitEvent} )
@@ -146,7 +183,7 @@ function getWeather (event) {
       
     // }
     
-  }
+  
   
 
  
