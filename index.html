@@ -22,8 +22,8 @@
             <img src="./assets/images/sun-behind-rain-cloud.png" alt="" width="40" height="34" class="d-inline-block align-text-center">
             Weather Report
           </a>
-          <form class="d-flex">
-            <input id = "search-btn" class="form-control me-2" type="search" placeholder="City, State" aria-label="Search">
+          <form id="zip-form" class="d-flex">
+            <input id = "zipcode" class="form-control me-2" type="search" placeholder="Zip Code" aria-label="Search">
             <button class="btn btn-outline-dark" type="submit">Search</button>
           </form>
         </div>
@@ -33,12 +33,12 @@
         <div id="main-content" class="row mt-5 mx-3">
 
             <!-- search history column start -->
-            <div class="col-sm-3">
-              <div class="card">
+            <div class="col-sm-2">
+              <div id="search-history-card" class="card">
                 <div class="card-body">
-                    <h5 class="card-header">Search History</h5>
+                    <h6 class="card-header">Search History</h6>
                     <div id = "btn-card" class="card-body">
-                        <div class="btn-group-vertical d-grid d-md-block gap-2">
+                        <div class="btn-group-vertical d-flex gap-1 mx-auto">
                             <button id = "history-btn"  class="btn btn-primary" type="submit">Button</button>
                             <button id = "history-btn"  class="btn btn-primary" type="submit">Button</button>
                             <button id = "history-btn"  class="btn btn-primary" type="submit">Button</button>
@@ -51,38 +51,105 @@
               </div>
             </div>
 
+
             <!-- forecast details column start -->
-            <div class="col-sm-9">
-              <div class="accordian">
-                <div id = "today detail" class="accordion-item">
-                    <h2 class="accordion-header" id="panelsStayOpen-headingOne">
-                    <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
-                        Today's Weather Report
-                    </button>
-                    </h2>
-                    <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
-                    <div class="accordion-body">
-                        <strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
+            <div class="col-sm-10">
+              <div id ="forecast-accordian" class="accordian">
+
+                  <!-- today's weather detail accordian item -->
+                    <div id = "today detail" class="accordion-item">
+                        <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne">
+                            Today's Weather Report
+                        </button>
+                        </h2>
+                        <div id="panelsStayOpen-collapseOne" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne">
+                        <div class="accordion-body">
+                            <h3 id = "location"></h3> 
+                            <h4 id = "todays-date"></h4> 
+                            <p id = "today-temp"></p>
+                            <p id = "today-wind"></p>
+                            <p id = "today-humidity"></p>
+                            <p id = "today-uv">UV Index</p>
+                        </div>
+                        </div>
                     </div>
+
+                    <!-- 5-day weather report accordion item -->
+                    <div id = "5-day-report" class="accordion-item">
+                        <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
+                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
+                            5-Day Weather Report
+                        </button>
+                        </h2>
+
+                        <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
+                        <div class="accordion-body container">
+                        <div class="container">
+                            <div class="row justify-content-center">
+                                <!-- card 1 -->
+                                <div class="col-sm-2">
+                                  <div class="card">
+                                    <div class="card-body">
+                                      <h5 class="card-title">12/12/21</h5>
+                                      <p class="card-text">Temperature.</p>
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <!-- card 2 -->
+                                <div class="col-sm-2">
+                                  <div class="card">
+                                    <div class="card-body">
+                                      <h5 class="card-title">12/13/21</h5>
+                                      <p class="card-text">Temperature.</p>
+                                      
+                                    </div>
+                                  </div>
+                                </div>
+                                <!-- card 3 -->
+                                <div class="col-sm-2">
+                                    <div class="card">
+                                      <div class="card-body">
+                                        <h5 class="card-title">12/14/21</h5>
+                                        <p class="card-text">Temperature.</p>
+                                        
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <!-- card 4 -->
+                                  <div class="col-sm-2">
+                                    <div class="card">
+                                      <div class="card-body">
+                                        <h5 class="card-title">12/15/21</h5>
+                                        <p class="card-text">Temperature.</p>
+                                        
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <!-- card 5 -->
+                                  <div class="col-sm-2">
+                                    <div class="card">
+                                      <div class="card-body">
+                                        <h5 class="card-title">12/16/21</h5>
+                                        <p class="card-text">Temperature.</p>
+                                        
+                                      </div>
+                                    </div>
+                                  </div>
+                              </div>
+
+                        </div>
+                        </div>
+                        </div>  
+
                     </div>
                 </div>
-
-                <div id = "5-day-report" class="accordion-item">
-                    <h2 class="accordion-header" id="panelsStayOpen-headingTwo">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo">
-                        5-Day Weather Report
-                    </button>
-                    </h2>
-                    <div id="panelsStayOpen-collapseTwo" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo">
-                    <div class="accordion-body">
-                        <strong>This is the second item's accordion body.</strong> It is hidden by default, until the collapse plugin adds the appropriate classes that we use to style each element. These classes control the overall appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go within the <code>.accordion-body</code>, though the transition does limit overflow.
-                    </div>
-                    </div>
-                </div>   
-              </div>
             </div>
-          </div>
 
+        </div>
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.27.0/moment.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-ka7Sk0Gln4gmtz2MlQnikT1wXgYsOg+OMhuP+IlRH9sENBO0LRn5q+8nbTov4+1p" crossorigin="anonymous"></script>
     <script src="./assets/js/script.js"></script>
 </body>

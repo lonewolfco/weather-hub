@@ -3,6 +3,14 @@
    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
 }
 
+#search-history-card {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
+#forecast-accordian {
+    box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+}
+
 /* #main-content {
     margin-top: 80px;
 }
@@ -11,7 +19,7 @@
     margin-top: 10px;
 } */
 
-/* #btn-card {
+.hide {
     display: none;
-} */
+}
 
