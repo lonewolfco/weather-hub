@@ -10,6 +10,7 @@ var icon = document.querySelector("#icon");
 var btnContainer = document.querySelector("#btn-div");
 let history = JSON.parse(localStorage.getItem("search-history")) || [];
 var clearBtn = document.querySelector("#clear-btn");
+var cardContainer = document.querySelector("#card-container");
 console.log(history)
 
 // var cityName = cityInputEl.value.trim();
@@ -39,6 +40,7 @@ var fiveDayData =  [
 
 // function to do the various api call outs to bring in weather data
 function getWeather (cityName) {
+  cardContainer.innerHTML = "";
   var APIkey = "256e015175e41b85d6b79c9fecee47d5";
   // var cityName = cityInputEl.value.trim();
   console.log(cityName);
@@ -97,23 +99,14 @@ function getWeather (cityName) {
               // Bring in 5 Day Forecast Data
               fiveDayData.forEach(function(fiveDayEl, index) {
 
-                var cardContainer = document.querySelector("#card-container");
+                // var cardContainer = document.querySelector("#card-container");
 
-                // Card Column Div
-                // var cardCol = document.createElement('div');
-                //   cardCol.className = "col-sm-12 col-md-5 col-lg-2 forecast";
-                //   cardCol.id = fiveDayEl.card;
-                //   cardContainer.append(cardCol);
 
                 // Card Element Div
                 var cardEl = document.createElement('div');
-                  cardEl.className = "col bg-primary text-white rounded mx-2 mb-3";
+                  cardEl.className = "col bg-primary text-white rounded mx-2 mb-3 pb-2";
                   cardContainer.append(cardEl);
 
-                // Card Body Div
-                // var cardBody = document.createElement('div');
-                //   cardBody.classList.add("card-body");
-                //   cardEl.append(cardBody);
 
                 // Card Date Title
                 var cardDate = document.createElement('h5');
@@ -196,10 +189,8 @@ if (history.length > 0) {
 // when the clear history button is pressed, remove data from local storage and clear out the history array
 clearBtn.addEventListener("click",function() {
   localStorage.removeItem("search-history");
+
   history = [];
-  // todayUV.classList.remove("bg-success");
-  // todayUV.classList.remove("bg-warning");
-  // todayUV.classList.remove("bg-danger");
   console.log(history);
   renderSearchHistBtns();
 })
@@ -216,9 +207,6 @@ cityFormEl.addEventListener("submit", cityFunction);
 
 function cityFunction () {
   var searchedCity = cityInputEl.value.trim();
-  todayUV.classList.remove("bg-success");
-  todayUV.classList.remove("bg-warning");
-  todayUV.classList.remove("bg-danger");
   getWeather(searchedCity);
   history.push(searchedCity);
   localStorage.setItem("search-history", JSON.stringify(history));
