@@ -1,6 +1,6 @@
-# weather-report
+# weather-hub
 
-https://loselby.github.io/weather-report/
+https://loselby.github.io/weather-hub/
 
 ## Task
 Use the [OpenWeather One Call API](https://openweathermap.org/api/one-call-api) to retrieve weather data for cities. Use `localStorage` to store any persistent data. For more information and create a dynamically useable search history from the data held in `localStorage`.
