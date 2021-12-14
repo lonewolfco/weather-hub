@@ -1,6 +1,8 @@
+
 // declare variables related to API call
 var cityInputEl = document.querySelector('#cityName');
 var cityFormEl = document.querySelector('#city-form');
+var todaySummary = document.querySelector ('#today-summary');
 var todayTemp = document.querySelector('#today-temp');
 var todayWind = document.querySelector("#today-wind");
 var todayHumidity = document.querySelector("#today-humidity");
@@ -13,7 +15,6 @@ var clearBtn = document.querySelector("#clear-btn");
 var cardContainer = document.querySelector("#card-container");
 console.log(history)
 
-// var cityName = cityInputEl.value.trim();
 
 // moment in time for today's forecast
 var today = moment();
@@ -24,20 +25,15 @@ todaysDateEl.textContent = (today.format("dddd, MMMM Do YYYY"));
 function getWeather (cityName) {
   cardContainer.innerHTML = "";
   var APIkey = "256e015175e41b85d6b79c9fecee47d5";
-  // var cityName = cityInputEl.value.trim();
   console.log(cityName);
 
 
   // first api call to find the lat and lon from the city name entered in the search field
   var requestUrl = 'http://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&appid=' + APIkey;
-  console.log(requestUrl);
-  // event.preventDefault();
  
   fetch(requestUrl)
   .then(function (response) {
-      console.log(response);
     if (response.ok) {
-      console.log(response);
       response.json().then(function (data) {
         console.log(data);
 
@@ -49,6 +45,7 @@ function getWeather (cityName) {
 
         // append values of today's forecast
         todaysDateEl.textContent = today.format("dddd, MMMM Do YYYY") + " in " + data.name;
+        todaySummary.textContent = "Summary: Currently, " + data.name + " is experiencing " + data.weather[0].description + ".";
         todayTemp.textContent = "Temperature: " + Math.floor((data.main.temp - 273.15) * 1.8 + 32) + "°F";
         var icon1 = data.weather[0].icon;
         icon.innerHTML = `<img src="./assets/images/${icon1}.png" style= 'height:10rem'/>`;
@@ -61,9 +58,7 @@ function getWeather (cityName) {
 
         fetch(uvAPI)
         .then(function (response) {
-          console.log(response);
         if (response.ok) {
-          console.log(response);
           response.json().then(function (data) {
             console.log(data);
 
@@ -98,7 +93,6 @@ function getWeather (cityName) {
                 var cardIcon = document.createElement('div');
                   cardIcon.classList.add("m-2")
                   var forecastIcon = data.daily[index].weather[0].icon;
-                  console.log(forecastIcon);
                   cardIcon.innerHTML = `<img src="./assets/images/${forecastIcon}.png" style= 'height:4rem'/>`;
                 
 
@@ -121,43 +115,34 @@ function getWeather (cityName) {
                   
 
                   cardEl.append(cardDate, cardIcon, cardTemp, cardWind, cardHumidity);
-
-                  console.log(index);
               }
 
-            // saveHistory ();
           }) } })  }) } })
 
 };
 
-// set search history to local storage based on what was entered in the user input search
-// function saveHistory () {
-//   var cityName = cityInputEl.value;
-//   history.push(cityName);
-//   localStorage.setItem("search-history", JSON.stringify(history));
-//   renderSearchHistBtns ();
-// }
+var historyButtons = document.getElementsByClassName('hist-btn');
+var numButtons = historyButtons.length;
+console.log (numButtons);
 
 
 
-// function to create the history buttons and set off the getWeather function with the values once they are pressed
-function renderSearchHistBtns () {
+function renderSearchHistBtns() {
   btnContainer.innerHTML = "";
-// for loop to create the search history buttons
-// ---> might need to change button to an input since on button click, it is not refreshing to the city on the history button
-    for(let i=0; i<history.length; i++) {
-        var histBtn = document.createElement("button");
-        histBtn.setAttribute("type", "submit");
-        // histBtn.setAttribute("readonly", true);
-        histBtn.setAttribute("class", "btn btn-primary");
-        histBtn.setAttribute("id", "history-btn");
-        histBtn.textContent = history[i];
-        histBtn.addEventListener("click", function () {
-          getWeather(histBtn.value);
-        })
-        btnContainer.append(histBtn);
-    }
+  for (let i=0; i<history.length; i++) {
+      const historytBtn = document.createElement("button");
+      historytBtn.setAttribute("type","text");
+      historytBtn.setAttribute("readonly",true);
+      historytBtn.setAttribute("class", "btn text-white btn-primary");
+      historytBtn.textContent = history[i];
+      historytBtn.setAttribute("value", history[i]);
+      historytBtn.addEventListener("click",function() {
+          getWeather(historytBtn.value);
+      })
+      btnContainer.append(historytBtn);
+  }
 }
+
 
 // keeps the search history buttons in view on refresh
 // ---->bug going on where an extra button is there even though subtracting 1
