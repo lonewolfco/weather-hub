@@ -100,46 +100,54 @@ function getWeather (cityName) {
                 var cardContainer = document.querySelector("#card-container");
 
                 // Card Column Div
-                var cardCol = document.createElement('div');
-                  cardCol.classList.add("col-sm-2");
-                  cardCol.id = fiveDayEl.card;
-                  cardContainer.append(cardCol);
+                // var cardCol = document.createElement('div');
+                //   cardCol.className = "col-sm-12 col-md-5 col-lg-2 forecast";
+                //   cardCol.id = fiveDayEl.card;
+                //   cardContainer.append(cardCol);
 
                 // Card Element Div
                 var cardEl = document.createElement('div');
-                  cardEl.className = "card bg-primary text-white";
-                  cardCol.append(cardEl);
+                  cardEl.className = "col bg-primary text-white rounded mx-2 mb-3";
+                  cardContainer.append(cardEl);
 
                 // Card Body Div
-                var cardBody = document.createElement('div');
-                  cardBody.classList.add("card-body");
-                  cardEl.append(cardBody);
+                // var cardBody = document.createElement('div');
+                //   cardBody.classList.add("card-body");
+                //   cardEl.append(cardBody);
 
                 // Card Date Title
                 var cardDate = document.createElement('h5');
-                  cardDate.classList.add("card-title");
-                  cardDate.textContent = (today.format("dddd, MMMM Do YYYY"));
-                  // cardDate.append(cardBody);
+                  cardDate.className = "mt-3 mb-0";
+                  let tomorrow  = moment().add([index],'days');
+                  cardDate.textContent = (tomorrow.format("L"));
+                 
+                // Card Icon
+                var cardIcon = document.createElement('div');
+                  cardIcon.classList.add("m-2")
+                  var forecastIcon = data.daily[index].weather[0].icon;
+                  console.log(forecastIcon);
+                  cardIcon.innerHTML = `<img src="./assets/images/${forecastIcon}.png" style= 'height:4rem'/>`;
+                
 
                 // Card Temp Text
                 var cardTemp = document.createElement('p');
                   cardTemp.classList.add("card-text");
-                  cardTemp.textContent = "Temp: " + Math.floor((data.daily[0].temp.day - 273.15) * 1.8 + 32) + "°F";
-                  // cardTemp.append(cardBody);
+                  cardTemp.textContent = "Temp: " + Math.floor((data.daily[index].temp.day - 273.15) * 1.8 + 32) + "°F";
+                 
 
                 // Card Wind Text
                 var cardWind = document.createElement('p');
                   cardWind.classList.add("card-text");
-                  cardWind.textContent = "Wind: " + Math.floor(data.daily[0].humidity * 2.237) + "mph";
-                  // cardWind.append(cardBody);
+                  cardWind.textContent = "Wind: " + Math.floor(data.daily[index].wind_speed * 2.237) + "mph";
+                
 
                   // Card Humidity Text
                   var cardHumidity = document.createElement('p');
                     cardHumidity.classList.add("card-text");
-                    cardHumidity.textContent = "Wind: " + data.daily[0].humidity+ "%";
-                      // $(".card-text").append(cardBody);
+                    cardHumidity.textContent = "Wind: " + data.daily[index].humidity+ "%";
+                  
 
-                  cardBody.append(cardDate, cardTemp, cardWind, cardHumidity);
+                  cardEl.append(cardDate, cardIcon, cardTemp, cardWind, cardHumidity);
 
                   console.log(index);
               })
