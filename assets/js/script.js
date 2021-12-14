@@ -12,20 +12,42 @@ let history = JSON.parse(localStorage.getItem("search-history")) || [];
 var clearBtn = document.querySelector("#clear-btn");
 console.log(history)
 
+// var cityName = cityInputEl.value.trim();
+
 // moment in time for today's forecast
 var today = moment();
 todaysDateEl.textContent = (today.format("dddd, MMMM Do YYYY"));
 
+var fiveDayData =  [
+  {
+    card: "0",
+  },
+  {
+    card: "1",
+  },
+  {
+    card: "2",
+  },
+  {
+    card: "3",
+  },
+  {
+    card: "4",
+  }
+]
   
 
-
-function getWeather (event) {
+// function to do the various api call outs to bring in weather data
+function getWeather (cityName) {
   var APIkey = "256e015175e41b85d6b79c9fecee47d5";
-  var cityName = cityInputEl.value.trim();
+  // var cityName = cityInputEl.value.trim();
   console.log(cityName);
+
+
+  // first api call to find the lat and lon from the city name entered in the search field
   var requestUrl = 'http://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&appid=' + APIkey;
   console.log(requestUrl);
-  event.preventDefault();
+  // event.preventDefault();
  
   fetch(requestUrl)
   .then(function (response) {
@@ -50,7 +72,7 @@ function getWeather (event) {
         todayHumidity.textContent = 'Humidity: ' + data.main.humidity + '%';
       
 
-        // make another api call to pull in UV Data
+        // make another api call using the lat and lon information to bring in UV Data & 5 day Forecast from onecall portion of openweathermap api
         var uvAPI = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly" + "&appid=" + APIkey + "&cnt=1";
 
         fetch(uvAPI)
@@ -61,25 +83,87 @@ function getWeather (event) {
           response.json().then(function (data) {
             console.log(data);
 
-    
-            todayUV.textContent = "UV Index: " + data.current.uvi;
+            // Fill in UV Index Data
+            todayUV.textContent = "UV Index: " + data.daily[0].uvi;
+              if (data.current.uvi >= 0) {
+                todayUV.classList.add("bg-success")
+              } else if (data.current.uvi >= 3) {
+                todayUV.classList.add("bg-warning")
+              } else if (data.current.uvi >= 8) {
+                todayUV.classList.add("bg-danger")
+              }
 
-            saveHistory ();
+
+              // Bring in 5 Day Forecast Data
+              fiveDayData.forEach(function(fiveDayEl, index) {
+
+                var cardContainer = document.querySelector("#card-container");
+
+                // Card Column Div
+                var cardCol = document.createElement('div');
+                  cardCol.classList.add("col-sm-2");
+                  cardCol.id = fiveDayEl.card;
+                  cardContainer.append(cardCol);
+
+                // Card Element Div
+                var cardEl = document.createElement('div');
+                  cardEl.className = "card bg-primary text-white";
+                  cardCol.append(cardEl);
+
+                // Card Body Div
+                var cardBody = document.createElement('div');
+                  cardBody.classList.add("card-body");
+                  cardEl.append(cardBody);
+
+                // Card Date Title
+                var cardDate = document.createElement('h5');
+                  cardDate.classList.add("card-title");
+                  cardDate.textContent = (today.format("dddd, MMMM Do YYYY"));
+                  // cardDate.append(cardBody);
+
+                // Card Temp Text
+                var cardTemp = document.createElement('p');
+                  cardTemp.classList.add("card-text");
+                  cardTemp.textContent = "Temp: " + Math.floor((data.daily[0].temp.day - 273.15) * 1.8 + 32) + "°F";
+                  // cardTemp.append(cardBody);
+
+                // Card Wind Text
+                var cardWind = document.createElement('p');
+                  cardWind.classList.add("card-text");
+                  cardWind.textContent = "Wind: " + Math.floor(data.daily[0].humidity * 2.237) + "mph";
+                  // cardWind.append(cardBody);
+
+                  // Card Humidity Text
+                  var cardHumidity = document.createElement('p');
+                    cardHumidity.classList.add("card-text");
+                    cardHumidity.textContent = "Wind: " + data.daily[0].humidity+ "%";
+                      // $(".card-text").append(cardBody);
+
+                  cardBody.append(cardDate, cardTemp, cardWind, cardHumidity);
+
+                  console.log(index);
+              })
+
+            // saveHistory ();
           }) } })  }) } })
 
 };
 
 // set search history to local storage based on what was entered in the user input search
-function saveHistory () {
-  var cityName = cityInputEl.value;
-  history.push(cityName);
-  localStorage.setItem("search-history", JSON.stringify(history));
-  renderSearchHistBtns ();
-}
+// function saveHistory () {
+//   var cityName = cityInputEl.value;
+//   history.push(cityName);
+//   localStorage.setItem("search-history", JSON.stringify(history));
+//   renderSearchHistBtns ();
+// }
 
+
+
+// function to create the history buttons and set off the getWeather function with the values once they are pressed
 function renderSearchHistBtns () {
   btnContainer.innerHTML = "";
-
+// for loop to create the search history buttons
+// ---> might need to change button to an input since on button click, it is not refreshing to the city on the history button
     for(let i=0; i<history.length; i++) {
         var histBtn = document.createElement("button");
         histBtn.setAttribute("type", "submit");
@@ -94,6 +178,14 @@ function renderSearchHistBtns () {
     }
 }
 
+// keeps the search history buttons in view on refresh
+// ---->bug going on where an extra button is there even though subtracting 1
+renderSearchHistBtns();
+if (history.length > 0) {
+    getWeather(history[history.length - 1]);
+}
+
+// when the clear history button is pressed, remove data from local storage and clear out the history array
 clearBtn.addEventListener("click",function() {
   localStorage.removeItem("search-history");
   history = [];
@@ -102,91 +194,20 @@ clearBtn.addEventListener("click",function() {
 })
 
 
-// // gets today's weather data and appends the data to the today's weather report accordion item
-// function getWeatherData () {
-//     var APIkey = "c9a9ed03a355403f4cb9a36e931c0b4a";
-//     var cityName = cityInputEl.value.trim();
-//     localStorage.setItem("history", JSON.stringify(cityName));
-//     event.console.log(cityName);
-//     var requestUrl = 'http://api.openweathermap.org/data/2.5/weather?zip=' + cityName + '&appid=' + APIkey;
-    
-//     fetch(requestUrl)
-//       .then(function (response) {
-//           console.log(response);
-//         if (response.ok) {
-//           console.log(response);
-//           response.json().then(function (data) {
-//             console.log(data);
 
-//             // declare lat & lon variables from data received
-//             var lat = response.data.coord.lat;
-//             var lon = response.data.coord.lon;
-
-//             // append values of today's forecast
-//             todaysDateEl.textContent = today.format("dddd, MMMM Do YYYY") + " in " + response.data.name;
-//             todayTemp.textContent = "Temperature: " + Math.floor((response.data.main.temp - 273.15) * 1.8 + 32) + "°F";
-//             var icon1 = data.weather[0].icon;
-//             icon.innerHTML = `<img src="./assets/icons/${icon1}.png" style= 'height:10rem'/>`;
-//             todayWind.textContent = "Wind: " + Math.floor(response.data.wind.speed * 2.237) + "mph";
-//             todayHumidity.textContent = 'Humidity: ' + response.data.main.humidity + '%';
-
-
-//             // make another api call to pull in UV Data
-//             var uvAPI = "https://api.openweathermap.org/data/2.5/uvi/forecast?lat=" + lat + "&lon=" + lon + "&appid=" + APIkey + "&cnt=1";
-
-//             fetch(uvAPI)
-//               .then(function (response) {
-//                 console.log(response);
-//                 var uvIndex = document.createElement("span");
-//                 uvIndex.setAttribute("class","badge badge-danger");
-//                 uvIndex.textContent = response.data[0].value;
-//                 todayUV.textContent = "UV Index: ";
-//                 todayUV.append(uvIndex);
-//               })
-
-//             // todayUV = 'UV Index: ' + data.;
-//           });
-//         } else {
-//           console.log(response);
-//           preventDefault ();
-//           alert('Error: ' + response.statusText);
-//         }
-//       })
-//       .catch(function (error) {
-//         preventDefault ();
-//         console.log(error);
-//         console.log(response);
-//         alert('Unable to recgonize zip code');
-//       });
-//       // run search history function
-//       // appendHistory();
-//   };
-
-
-  // function appendHistory () {
-  //   // gets search history to local storage
-  //     var history = (localStorage.getItem(history));
-  //     console.log(history);
-
-  //   array.forEach(history => {
-  //     var newButton = document.createElement('button')
-  //     newButton.classList.add("btn btn-primary");
-  //     newButton.textContent = history;
-  //     btnContainer.append(newButton);
-  //   }); 
-    
-    // for(i = 0; i < history.length; i++) {
-    //   var newButton = document.createElement(button, {is:SubmitEvent} )
-    //   newButton.classList.add("btn btn-primary");
-    //   newButton.textContent = history;
-    //   btnContainer.append(newButton);
-      
-    // }
-    
-  
-  
-
- 
-            // "Temperature: " + Math.floor(data.main.temp - kelvin * 1.8 + 32) + "°F";
+// prevent reload when submit button is pressed
 function handleForm(event) {event.preventDefault();};
-cityFormEl.addEventListener("submit", getWeather);
+
+// event listener for when the search button is pressed to run the function that saves the var cityname
+cityFormEl.addEventListener("submit", cityFunction);
+
+// function to set the cityName variable after the search button is pressed
+
+function cityFunction () {
+  var searchedCity = cityInputEl.value.trim();
+  getWeather(searchedCity);
+  history.push(searchedCity);
+  localStorage.setItem("search-history", JSON.stringify(history));
+  renderSearchHistBtns ();
+
+}
