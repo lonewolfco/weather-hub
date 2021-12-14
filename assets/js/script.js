@@ -85,12 +85,12 @@ function getWeather (cityName) {
 
             // Fill in UV Index Data
             todayUV.textContent = "UV Index: " + data.daily[0].uvi;
-              if (data.current.uvi >= 0) {
-                todayUV.classList.add("bg-success")
-              } else if (data.current.uvi >= 3) {
-                todayUV.classList.add("bg-warning")
-              } else if (data.current.uvi >= 8) {
-                todayUV.classList.add("bg-danger")
+              if (data.daily[0].uvi < 2 ) {
+                todayUV.classList.add("bg-success");
+              } else if (data.daily[0].uvi >= 3 && data.current.uvi < 7) {
+                todayUV.classList.add("bg-warning");
+              } else if (data.daily[0].uvi >= 8) {
+                todayUV.classList.add("bg-danger");
               }
 
 
@@ -197,6 +197,9 @@ if (history.length > 0) {
 clearBtn.addEventListener("click",function() {
   localStorage.removeItem("search-history");
   history = [];
+  // todayUV.classList.remove("bg-success");
+  // todayUV.classList.remove("bg-warning");
+  // todayUV.classList.remove("bg-danger");
   console.log(history);
   renderSearchHistBtns();
 })
@@ -213,6 +216,9 @@ cityFormEl.addEventListener("submit", cityFunction);
 
 function cityFunction () {
   var searchedCity = cityInputEl.value.trim();
+  todayUV.classList.remove("bg-success");
+  todayUV.classList.remove("bg-warning");
+  todayUV.classList.remove("bg-danger");
   getWeather(searchedCity);
   history.push(searchedCity);
   localStorage.setItem("search-history", JSON.stringify(history));
