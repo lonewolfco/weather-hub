@@ -19,24 +19,6 @@ console.log(history)
 var today = moment();
 todaysDateEl.textContent = (today.format("dddd, MMMM Do YYYY"));
 
-var fiveDayData =  [
-  {
-    card: "0",
-  },
-  {
-    card: "1",
-  },
-  {
-    card: "2",
-  },
-  {
-    card: "3",
-  },
-  {
-    card: "4",
-  }
-]
-  
 
 // function to do the various api call outs to bring in weather data
 function getWeather (cityName) {
@@ -96,10 +78,8 @@ function getWeather (cityName) {
               }
 
 
-              // Bring in 5 Day Forecast Data
-              fiveDayData.forEach(function(fiveDayEl, index) {
-
-                // var cardContainer = document.querySelector("#card-container");
+              // For loop to create 5 Day Forecast Elements
+              for (let index = 0; index < 5; index++) {
 
 
                 // Card Element Div
@@ -143,7 +123,7 @@ function getWeather (cityName) {
                   cardEl.append(cardDate, cardIcon, cardTemp, cardWind, cardHumidity);
 
                   console.log(index);
-              })
+              }
 
             // saveHistory ();
           }) } })  }) } })
