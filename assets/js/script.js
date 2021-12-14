@@ -29,7 +29,7 @@ function getWeather (cityName) {
 
 
   // first api call to find the lat and lon from the city name entered in the search field
-  var requestUrl = 'http://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&appid=' + APIkey;
+  var requestUrl = 'https://api.openweathermap.org/data/2.5/weather?q=' + cityName + '&appid=' + APIkey;
  
   fetch(requestUrl)
   .then(function (response) {
