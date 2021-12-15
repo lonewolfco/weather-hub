@@ -137,6 +137,9 @@ function renderSearchHistBtns() {
       historytBtn.textContent = history[i];
       historytBtn.setAttribute("value", history[i]);
       historytBtn.addEventListener("click",function() {
+          todayUV.classList.remove("bg-success");
+          todayUV.classList.remove("bg-danger");
+          todayUV.classList.remove("bg-warning");
           getWeather(historytBtn.value);
       })
       btnContainer.append(historytBtn);
