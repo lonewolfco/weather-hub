@@ -2,7 +2,7 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
 
-https://loselby.github.io/weather-hub/
+https://lonewolfco.github.io/weather-hub/
 
 ## Task
 Use the [OpenWeather One Call API](https://openweathermap.org/api/one-call-api) to retrieve weather data for cities. Use `localStorage` to store any persistent data. For more information and create a dynamically useable search history from the data held in `localStorage`.
